@@ -39,7 +39,7 @@ jobs:
       run: |
         git config --global user.name 'morshaq'
         git config --global user.email 'morshaq@gmail.com'
-        git add $POM_PATH
+        git add myapp/pom.xml
         git commit -m "Increment version to $NEW_VERSION"
         git push
    
