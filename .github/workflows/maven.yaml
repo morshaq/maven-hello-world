@@ -49,8 +49,16 @@ jobs:
         JAR_FILE=$(ls myapp/target/*.jar)
         echo "JAR_FILE_NAME=$JAR_FILE" >> $GITHUB_ENV
 
+
+    - name: Echo new version
+      run: echo "New version for the docker is ******* ${{ env.NEW_VERSION }}  *******"
+
     - name: Build Docker image
       run: docker build --build-arg JAR_FILE=${{ env.JAR_FILE_NAME }} -t myapp:${{ env.NEW_VERSION }} .
+
+    - name: Build Docker image
+      run: docker build --build-arg JAR_FILE=${{ env.JAR_FILE_NAME }} -t myapp:${{ env.NEW_VERSION }} .
+
 
    
 
