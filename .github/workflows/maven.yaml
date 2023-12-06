@@ -17,6 +17,9 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+        
+    - name: Install libxml2
+      run: sudo apt-get install -y libxml2-utils
 
     - name: Auto-increment Patch Version
       run: |
