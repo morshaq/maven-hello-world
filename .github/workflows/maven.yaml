@@ -23,14 +23,13 @@ jobs:
 
     - name: Auto-increment Patch Version
       run: |
-         # Extract the current version from pom.xml
-         # Correct the path to pom.xml if it's in a subdirectory
-         POM_PATH="myapp/pom.xml"
-         CURRENT_VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" $POM_PATH)
-         echo "Current Version: $CURRENT_VERSION"
-         NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{$NF++;print}')
-         echo "New Version: $NEW_VERSION"
-         sed -i "s/<version>$CURRENT_VERSION<\/version>/<version>$NEW_VERSION<\/version>/" $POM_PATH
+        POM_PATH="myapp/pom.xml"
+        CURRENT_VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" $POM_PATH)
+        echo "Current Version: $CURRENT_VERSION"
+        NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{$NF++;print}')
+        echo "New Version: $NEW_VERSION"
+        sed -i "s/<version>$CURRENT_VERSION<\/version>/<version>$NEW_VERSION<\/version>/" $POM_PATH
+        echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
     - name: Build with Maven
       run: mvn -B package --file myapp/pom.xml
@@ -44,22 +43,12 @@ jobs:
         git push
 
     - name: Find JAR file
-      id: find_jar
       run: |
         JAR_FILE=$(ls myapp/target/*.jar)
         echo "JAR_FILE_NAME=$JAR_FILE" >> $GITHUB_ENV
 
-
     - name: Echo new version
-      run: echo "New version for the docker is ******* ${{ env.NEW_VERSION }}  *******"
+      run: echo "New version for the docker is ${{ env.NEW_VERSION }}"
 
     - name: Build Docker image
       run: docker build --build-arg JAR_FILE=${{ env.JAR_FILE_NAME }} -t myapp:${{ env.NEW_VERSION }} .
-
-    - name: Build Docker image
-      run: docker build --build-arg JAR_FILE=${{ env.JAR_FILE_NAME }} -t myapp:${{ env.NEW_VERSION }} .
-
-
-   
-
-    
