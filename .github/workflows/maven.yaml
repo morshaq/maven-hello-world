@@ -20,17 +20,14 @@ jobs:
 
     - name: Auto-increment Patch Version
       run: |
-        # Extract the current version from pom.xml
-        CURRENT_VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
-        echo "Current Version: $CURRENT_VERSION"
-        
-        # Increment the patch version
-        NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{$NF++;print}')
-        echo "New Version: $NEW_VERSION"
-        
-        # Update pom.xml with the new version
-        sed -i "s/<version>$CURRENT_VERSION<\/version>/<version>$NEW_VERSION<\/version>/" pom.xml
-    
+         # Extract the current version from pom.xml
+         # Correct the path to pom.xml if it's in a subdirectory
+         POM_PATH="myapp/pom.xml"
+         CURRENT_VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" $POM_PATH)
+         echo "Current Version: $CURRENT_VERSION"
+         NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{$NF++;print}')
+         echo "New Version: $NEW_VERSION"
+         sed -i "s/<version>$CURRENT_VERSION<\/version>/<version>$NEW_VERSION<\/version>/" $POM_PATH
 
     - name: Build with Maven
       run: mvn -B package --file myapp/pom.xml
