@@ -37,8 +37,8 @@ jobs:
       
     - name: Commit and Push Changes
       run: |
-        git config --global user.name 'Your GitHub Username'
-        git config --global user.email 'your-email@example.com'
+        git config --global user.name 'morshaq'
+        git config --global user.email 'morshaq@gmail.com'
         git add $POM_PATH
         git commit -m "Increment version to $NEW_VERSION"
         git push
